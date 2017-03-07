@@ -1,0 +1,122 @@
+﻿@model nme_blog.Models.BlogPost
+
+
+@*  Above model passed in to this view is represented as Model (Capital M, the rest is lower case)
+    Microsoft uses it in lower case (model) though for lambda expressions only. 
+    However, we don't have to use lower case model in lambda expressions. We can simply use anything in there like m => m., c=> c. as long as both sides match.
+
+    There is only one model associated with a view. So, we can't pass more than one model to a view.
+    But we can use "View Models" and make the single model to look like more than one model. 
+    
+    Razor is a scripting language allowing us to write C# code in a view. Also, Razor is .Net. 
+    Razor syntax which is prefixed with an at symbol and it comes with many Html helpers.
+    Html helpers create/produce/render html for us. *@
+
+@{
+    ViewBag.Title = "Blog | New Post";
+}
+
+<h2>Create</h2>
+
+
+@using (Html.BeginForm("Create", "BlogPosts", FormMethod.Post, new { enctype = "Multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>BlogPost</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Created, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Created, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Created, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Updated, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Updated, new { htmlAttributes = new { @class = "form-control" } })
+                @*Above Html helper for EditorFor would produce the exact same html below:
+                <input id="Updated" name="Updated" type="text" class="form-control">*@
+
+                @Html.ValidationMessageFor(model => model.Updated, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Slug, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Slug, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Slug, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Body, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Body, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Body, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.mediaURL, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @*@Html.EditorFor(model => model.mediaURL, new { htmlAttributes = new { @class = "form-control" } })
+                    
+                    EditorFor is not creating the <input> tag/element with the "file" type. So, we needed to replace it with regular html <input> tag to specify type="file".
+                    id="fileUpload" is NOT being used as any reference for image uploading actually.
+                    What is used as a reference in the Controller/Create ActionResult is name="image". So the parameter in the Controller should match "image" as it's named after here.
+                    Controller code: public ActionResult Create([Bind(Include = "Id,Title,Body,mediaURL,Published")] BlogPost blogPost, HttpPostedFileBase image){} 
+                 *@
+                <input name="image" type="file" class="form-control" id="fileUpload" />
+                @Html.ValidationMessageFor(model => model.mediaURL, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Published, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <div class="checkbox">
+                    @Html.EditorFor(model => model.Published)
+                    @Html.ValidationMessageFor(model => model.Published, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back Home", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script src="~/Scripts/tinymce/tinymce.min.js"></script>
+    <script src="~/Scripts/tinymce/jquery.tinymce.min.js"></script>
+    <script type="text/javascript">
+            $(function () {
+                tinymce.init({
+                    selector: '#Body'
+                });
+            });
+    </script>
+}

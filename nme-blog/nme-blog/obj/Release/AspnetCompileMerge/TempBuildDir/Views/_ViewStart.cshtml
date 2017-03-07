@@ -1,0 +1,30 @@
+﻿@{
+
+    var controller = HttpContext.Current.Request.RequestContext.RouteData.Values["Controller"].ToString();
+    var action = HttpContext.Current.Request.RequestContext.RouteData.Values["Action"].ToString();
+
+    string layoutInUse = "";
+    if (controller == "Account" || controller == "Comments" || controller == "Home" || controller == "Manage")
+    {
+        layoutInUse = "~/Views/Shared/_AdminLayout.cshtml";
+    }
+    else if (controller == "BlogPosts")
+    {
+        if (action != "Index" && action != "Details" )
+        {
+            layoutInUse = "~/Views/Shared/_AdminLayout.cshtml";
+        }
+        else
+        {
+            layoutInUse = "~/Views/Shared/_Layout.cshtml";
+        }
+    }
+    else
+    {
+        layoutInUse = "~/Views/Shared/_Layout.cshtml";
+    }
+
+    Layout = layoutInUse;
+
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+}

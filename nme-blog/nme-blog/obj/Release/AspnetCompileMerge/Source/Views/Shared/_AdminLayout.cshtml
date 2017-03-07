@@ -1,0 +1,88 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuran Esen | @ViewBag.Title</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+    <!-- Bootstrap Theme CSS Fonts -->
+    <!----webfonts---->
+    <link href='https://fonts.googleapis.com/css?family=Oswald:100,400,300,700' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,700,300italic,400italic,600italic' rel='stylesheet' type='text/css'>
+    <!----//webfonts---->
+</head>
+<body>
+    @*// NME: Cosmetics issues/concerns:*@
+    @*// NME: In any View Action, when there is a DateTime column data in the body, there is a format issue, e.g. 2/27/2017 7:44:18 PM +00:00
+        Check all usages of Datetime columns like [Created] and change the format.*@
+    @*// NME: class banner in style.css has the background image but it's not wide to cover the entire screen horizontally. 
+        Also, there might be a way to increase the vertical size of the image display, too. Or perhaps, it's not necessary. 
+      // NME: Make sure bootstrap installed in Nuget is v.3.1.1 as I copied the template's bootstrap.css to this foler manually to override the existing one with was v.3.0.0: ~/Content/bootstrap.css 
+    *@
+
+    <div class="navbar navbar-inverse navbar-fixed-top" id="to-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("Nuran's Blog", "Index", "BlogPosts", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>@Html.ActionLink("Blog Home", "Index", "BlogPosts")</li>
+                    <li>@Html.ActionLink("About", "About", "Home")</li>
+                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                    <li>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            if (User.IsInRole("Admin") || User.IsInRole("Moderator"))
+                            {
+                                @Html.ActionLink("Admin", "BlogAdmin", "BlogPosts")
+                            }
+                        }
+                    </li>
+                    <li>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            if (User.IsInRole("Admin") || User.IsInRole("Moderator"))
+                            {
+                                @Html.ActionLink("Create", "Create", "BlogPosts")
+                            }
+                        }
+                    </li>
+                    @Html.Partial("_LoginPartial")
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+        <br/>
+        <hr />
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    <!-- Social media icons from font awesome -->
+    <script src="https://use.fontawesome.com/1511989ef2.js"></script>
+
+    <script type="text/javascript" src="~/Scripts/js/move-top.js"></script>
+    <script type="text/javascript" src="~/Scripts/js/easing.js"></script>
+    <!--/script-->
+    <script type="text/javascript">
+			jQuery(document).ready(function($) {
+				$(".scroll").click(function(event){
+					event.preventDefault();
+					$('html,body').animate({scrollTop:$(this.hash).offset().top},900);
+				});
+			});
+    </script>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

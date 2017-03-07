@@ -1,0 +1,85 @@
+﻿@model IEnumerable<nme_blog.Models.BlogPost>
+
+@{
+    ViewBag.Title = "Blog | BlogAdmin";
+}
+
+<h2>BlogAdmin</h2>
+
+
+<div class="form">
+    <h4>All BlogPosts</h4>
+    <hr />
+    <div class="form-group">
+        <table class="table">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Created)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Updated)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Title)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Slug)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Body)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.mediaURL)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Published)
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Created)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Updated)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Title)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Slug)
+                    </td>
+                    <td>
+                        @Html.Raw(item.Body)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.mediaURL)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Published)
+                    </td>
+                    @*<td>
+                        @Html.ActionLink("Edit", "Edit", new { slug = item.Slug }) |
+                        @Html.ActionLink("Details", "Details", new { slug = item.Slug }) |
+                        @Html.ActionLink("Delete", "Delete", new { slug = item.Slug })
+                    </td>*@
+                </tr>
+                <tr>                    
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { slug = item.Slug }) |
+                    </td>
+                    <td>
+                        @Html.ActionLink("Details", "Details", new { slug = item.Slug }) |
+                    </td>
+                    <td>
+                        @Html.ActionLink("Delete", "Delete", new { slug = item.Slug })
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>
+

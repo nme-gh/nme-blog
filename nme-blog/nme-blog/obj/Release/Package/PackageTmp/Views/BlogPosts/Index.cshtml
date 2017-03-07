@@ -1,0 +1,95 @@
+﻿@*@model IEnumerable<nme_blog.Models.BlogPost>*@
+
+@model IPagedList<nme_blog.Models.BlogPost>
+@using PagedList;
+@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = "Blog | Home";
+}
+
+<head>
+    <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css"> 
+</head>
+
+<!---start-banner---->
+<div class="banner">
+    <div class="container">
+        <div class="banner-head">
+            <h1>Words from Me</h1>
+            <h2>Check out My Blog</h2>
+        </div>
+    </div>
+</div>
+<!---//End-banner---->
+<div class="content">
+    <div class="container">
+        <div class="content-grids">
+            <div class="col-md-8 content-main">
+                @*@foreach (var item in Model.Reverse())*@
+                @foreach (var item in Model)
+                {
+                    <div class="content-grid-sec">
+                        <div class="content-sec-info">
+                            @Html.ActionLink(item.Title, "Details", routeValues: new { slug = item.Slug })
+                            <h4>@Html.DisplayFor(modelItem => item.Created)</h4>
+                            @Html.Raw(item.Body)
+                            <div class="row">
+                                @if (item.mediaURL != null)
+                                {
+                                    <div class="col-md-4">
+                                        <img class="img-responsive" src="@item.mediaURL" alt="">
+                                    </div>
+                                }
+                            </div>
+                            @Html.ActionLink("Read More", "Details", routeValues: new { slug = item.Slug }, htmlAttributes: new { @class = "bttn" })
+                        </div>
+                    </div>
+                }
+                <div class="content-grid-sec">
+                    <div class="content-sec-info">
+                        <!-- output a paging control that lets the user navigation to the previous page or next page, etc -->
+                        @*@Html.PagedListPager((IPagedList)ViewBag.currentPageData, page => Url.Action("Index", new { page }))*@
+                        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount	@Html.PagedListPager(Model, page => Url.Action("Index", new { page, searchStr = ViewBag.UserSearch }))
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 content-main-right">
+                <div class="search">
+                    <h3>SEARCH HERE</h3>
+                    @using (Html.BeginForm("Index", "BlogPosts", FormMethod.Post, new { @class = "form" }))
+                    {
+                        <div class="form-control-static">
+                            <input id="searchStr" name="searchStr" type="text" placeholder="...->" >
+                            <input type="submit" value="">
+                        </div>
+                    }
+                </div>
+                @*<div class="categories">
+                    <h3>CATEGORIES</h3>
+                    <li class="active"><a href="#">Donec quis dui at dolor tempor</a></li>
+                    <li><a href="#">Vestibulum commodo felis quis tort</a></li>
+                    <li><a href="#">Fusce pellentesque suscipit</a></li>
+                </div>*@
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+<script type="text/javascript">
+    $(document).ready(function() {
+		/*
+		var defaults = {
+		containerID: 'toTop', // fading element id
+		containerHoverID: 'toTopHover', // fading element hover id
+		scrollSpeed: 1200,
+		easingType: 'linear'
+		};
+		*/
+		$().UItoTop({ easingType: 'easeOutQuart' });
+    });
+</script>
+<a href="#to-top" id="toTop" style="display: block;"> <span id="toTopHover" style="opacity: 1;"> </span></a>
+}
